@@ -120,5 +120,5 @@
     </ul>
     <p>The two figures are SVGs embedded in the page and turned into data URLs on load: they need no other files. The browser must support ES modules, Canvas 2D (to read the outline), <code>ResizeObserver</code>, <code>document.fonts</code> and <code>Intl.Segmenter</code>, all available in current versions of Chrome, Edge, Firefox and Safari.</p>
     <p>Without a network the two external resources do not arrive: the text stays readable as ordinary paragraphs, but without figures or flow around the outline. In production it is better to serve Pretext and the font from your own domain rather than from a CDN, so as not to depend on third-party services or send them data about your visitors.</p>
-    <p>The development tools in the <code>tools/</code> folder are not needed by the page. Deriving the SVGs from the image requires Python with numpy, Pillow, SciPy and vtracer; the automated tests require Chromium and websocket-client.</p>
+    <p>The development tools in the <code>tools/</code> folder are not needed by the page: the build script needs only Python, and the automated tests need Chromium and websocket-client.</p>
   </section>

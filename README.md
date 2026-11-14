@@ -116,7 +116,6 @@ src/strings.json         UI labels and the status-line strings used by the scrip
 src/svg/left.svg         the two figures
 src/svg/right.svg
 tools/build.py           src/ -> index.html and barebone.html
-tools/extract.py         tools/reference.png -> src/svg/*.svg (crop, drop surrounding text, trace)
 tools/test/check.py      headless Chromium: drives controls and viewport, measures alignment
 tools/test/sweep.py      tries every word and list entry as target at 375, 830 and 1280 px
 ```
@@ -126,13 +125,11 @@ The template holds placeholders: `{{CONTENT}}`, `{{t:key}}`, `{{STRINGS}}` and `
 or `<!--bare-->…<!--/bare-->` in HTML, and in `/*full*/…/*/full*/` in CSS and JS.
 
 ```sh
+python3 tools/build.py                          # rebuild both pages (standard library only)
+
+# tests: need `chromium` on PATH and websocket-client
 python3 -m venv .venv
 .venv/bin/pip install -r tools/requirements.txt
-
-.venv/bin/python tools/build.py                 # rebuild all pages
-.venv/bin/python tools/extract.py               # only when the figures change
-
-# tests: need `chromium` on PATH
 .venv/bin/python -I tools/test/check.py                              # index.html
 .venv/bin/python -I tools/test/check.py "file://$PWD/barebone.html"
 .venv/bin/python -I tools/test/sweep.py 100 barebone.html           # figure size %, page
@@ -155,8 +152,8 @@ On a barebone page `check.py` runs only the viewport steps, because there are no
 - Line breaking by [Pretext](https://github.com/chenglou/pretext) by Cheng Lou.
 - Typeface: [Source Sans 3](https://fonts.google.com/specimen/Source+Sans+3) by Paul D. Hunt for
   Adobe.
-- The figures were traced with [vtracer](https://github.com/visioncortex/vtracer) from the
-  reference illustration in `tools/reference.png`.
+- The figures were traced with [vtracer](https://github.com/visioncortex/vtracer) from a
+  hand-drawn illustration.
 
 ## License
 
