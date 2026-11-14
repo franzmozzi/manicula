@@ -1,7 +1,6 @@
 {
   "title": "Dynamic maniculae",
   "description": "Editorial prototype: illustrated maniculae that bleed into the margins, with the text flowing around their outline, computed in real time with Pretext.",
-  "langSwitch": "Language",
   "target1": "Target ¶1",
   "target2": "Target ¶2",
   "listItem": "List item",

@@ -12,20 +12,14 @@ step at runtime. Open `index.html` in a browser, or see the live demo:
 
 ## Pages
 
-Each link opens the live page.
+There are two versions of the same article:
 
-| | Full (with controls) | Barebone |
-|---|---|---|
-| English (default) | [`index.html`](https://franzmozzi.github.io/manicula/index.html) | [`barebone.html`](https://franzmozzi.github.io/manicula/barebone.html) |
-| Italiano | [`it/index.html`](https://franzmozzi.github.io/manicula/it/index.html) | [`it/barebone.html`](https://franzmozzi.github.io/manicula/it/barebone.html) |
-| Deutsch | [`de/index.html`](https://franzmozzi.github.io/manicula/de/index.html) | [`de/barebone.html`](https://franzmozzi.github.io/manicula/de/barebone.html) |
-
-- **Full** has a control bar for experimenting live. You can change each block's target, the
+- **[Full](https://franzmozzi.github.io/manicula/)** (`index.html`) has a control bar for experimenting live. You can change each block's target, the
   column width, the figure size and the finger gap, and show the traced outline. A status line
   under each block reports how well the finger lines up with its target.
-- **Barebone** has only the article, with the defaults hard-coded in the stylesheet. Size and
+- **[Barebone](https://franzmozzi.github.io/manicula/barebone.html)** (`barebone.html`) has only the article, with the defaults hard-coded in the stylesheet. Size and
   spacing change only through the attributes of each block's mark.
-- The bar of each page links to the same variant in the other languages and to the other variant.
+- Each page links to the other one from its top bar.
 
 ## How it works
 
@@ -95,7 +89,6 @@ status line.
   and the figures are decorative.
 - **Fallback.** Without JavaScript or network, each block is a plain paragraph with the words
   highlighted.
-- **Languages.** Pages carry the correct `lang` and link their translations with `hreflang`.
 
 ## Dependencies
 
@@ -118,11 +111,11 @@ example with GitHub Pages.
 
 ```
 src/template.html        shared shell: styles, control bar, layout engine
-src/content/<lang>.html  article, usage guide and target suggestions for one language
-src/i18n/<lang>.json     UI labels and the status-line strings used by the script
+src/content.html         article, usage guide and target suggestions
+src/strings.json         UI labels and the status-line strings used by the script
 src/svg/left.svg         the two figures
 src/svg/right.svg
-tools/build.py           src/ -> the six pages (list in PAGES)
+tools/build.py           src/ -> index.html and barebone.html
 tools/extract.py         tools/reference.png -> src/svg/*.svg (crop, drop surrounding text, trace)
 tools/test/check.py      headless Chromium: drives controls and viewport, measures alignment
 tools/test/sweep.py      tries every word and list entry as target at 375, 830 and 1280 px
@@ -141,18 +134,11 @@ python3 -m venv .venv
 
 # tests: need `chromium` on PATH
 .venv/bin/python -I tools/test/check.py                              # index.html
-.venv/bin/python -I tools/test/check.py "file://$PWD/de/barebone.html"
-.venv/bin/python -I tools/test/sweep.py 100 it/index.html            # figure size %, page
+.venv/bin/python -I tools/test/check.py "file://$PWD/barebone.html"
+.venv/bin/python -I tools/test/sweep.py 100 barebone.html           # figure size %, page
 ```
 
 On a barebone page `check.py` runs only the viewport steps, because there are no controls.
-
-### Adding a language
-
-1. Copy `src/content/en.html` and `src/i18n/en.json` to the new language code and translate
-   them. Keep the block ids and one `data-manicula` per block.
-2. Add the language and its two output paths to `PAGES` in `tools/build.py`.
-3. Run the build, then `check.py` and `sweep.py` on the new pages.
 
 ## Known limitations
 

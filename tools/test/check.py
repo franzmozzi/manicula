@@ -26,7 +26,7 @@ try:
     ev(open(__import__('os').path.join(__import__('os').path.dirname(__file__), 'measure.js')).read())
     steps = [
         ("initial", ""),
-        # alternative targets taken from the page itself, so the same steps work in every language
+        # alternative targets taken from the page itself, so the steps follow the content file
         ("alt targets: 4th/2nd suggestion, item 5, 2nd suggestion", "const opt = (id, n) => document.querySelectorAll(`#${id} option`)[n].value; set('target-1', opt('targets-1', 3)); set('target-2', opt('targets-2', 1)); set('item-3', '5'); set('target-4', opt('targets-4', 1))"),
         ("col 420 (ResizeObserver)", "set('col-w', 420)"),
         ("finger-pad 40", "set('finger-pad', 40)"),

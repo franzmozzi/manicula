@@ -15,7 +15,7 @@ try:
             if r.get("id")==n[0]: return r
     ev=lambda e: call("Runtime.evaluate",expression=e,awaitPromise=True,returnByValue=True)["result"].get("result",{}).get("value")
     ev("new Promise(r=>{const t=()=>document.documentElement.dataset.ready==='true'?r():setTimeout(t,100);t();})")
-    zoom = sys.argv[1] if len(sys.argv) > 1 else "100"   # usage: sweep.py [manicule %] [page, e.g. it/index.html]
+    zoom = sys.argv[1] if len(sys.argv) > 1 else "100"   # usage: sweep.py [manicule %] [page, e.g. barebone.html]
     ev(f"document.documentElement.style.setProperty('--mani-zoom', '{int(zoom) / 100}')")
     for w in (375, 830, 1280):
         call("Emulation.setDeviceMetricsOverride",width=w,height=1600,deviceScaleFactor=1,mobile=w<600)
