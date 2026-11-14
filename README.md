@@ -16,7 +16,7 @@ There are two versions of the same article:
 
 - **[Full](https://franzmozzi.github.io/manicula/)** (`index.html`) has a control bar for experimenting live. You can change each block's target, the
   column width, the figure size and the finger gap, and show the traced outline. A status line
-  under each block reports how well the finger lines up with its target.
+  under each block names the line the finger points at, and warns when it misses it.
 - **[Barebone](https://franzmozzi.github.io/manicula/barebone.html)** (`barebone.html`) has only the article, with the defaults hard-coded in the stylesheet. Size and
   spacing change only through the attributes of each block's mark.
 - Each page links to the other one from its top bar.

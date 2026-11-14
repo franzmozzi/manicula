@@ -16,10 +16,11 @@
     "notFound": "{term} not found in the block.",
     "lineUnknown": "{term} found, but its line could not be located.",
     "blocked": "{term}: the finger covers the whole column; shrink the maniculae or widen the column.",
-    "ok": "{term} → line {line} · finger offset {err}px · {passes}",
+    "ok": "{term} → line {line} · {passes}",
     "passOne": "{n} pass",
     "passMany": "{n} passes",
-    "forcedBreak": " · forced line break"
+    "forcedBreak": " · forced line break",
+    "missed": " · the finger misses the line by {err}px"
   },
   "bareLink": "Barebone version",
   "fullLink": "Full version",

@@ -906,9 +906,11 @@ class ManiculaBlock {
     if (!res.target) { this.status.textContent = fmt(T.notFound, { term }); return; }
     if (res.lineIndex < 0) { this.status.textContent = fmt(T.lineUnknown, { term }); return; }
     if (res.blocked) { this.status.textContent = fmt(T.blocked, { term }); return; }
-    const err = res.error < 0.05 ? '0' : res.error.toFixed(1);
-    this.status.textContent = fmt(T.ok, { term, line: res.lineIndex + 1, err, passes: fmt(res.passes === 1 ? T.passOne : T.passMany, { n: res.passes }) })
-      + (res.forcedBreak ? T.forcedBreak : '');
+    // The solver stops once the tip is within half a pixel of the line centre, so a residual
+    // only shows up when aiming failed: report it as a warning, not as a routine 0px.
+    this.status.textContent = fmt(T.ok, { term, line: res.lineIndex + 1, passes: fmt(res.passes === 1 ? T.passOne : T.passMany, { n: res.passes }) })
+      + (res.forcedBreak ? T.forcedBreak : '')
+      + (res.error >= 0.5 ? fmt(T.missed, { err: res.error.toFixed(1) }) : '');
   }
 /*/full*/
 }
