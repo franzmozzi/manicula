@@ -23,5 +23,9 @@
     "forcedBreak": " · a capo forzato"
   },
   "bareLink": "Versione essenziale",
-  "fullLink": "Versione completa"
+  "fullLink": "Versione completa",
+  "repoLabel": "Codice sorgente",
+  "repoTitle": "Open source su GitHub",
+  "repoText": "franzmozzi/manicula · codice, guida al markup e strumenti di build, in pubblico dominio.",
+  "repoLink": "Vai su GitHub"
 }

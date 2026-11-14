@@ -23,5 +23,9 @@
     "forcedBreak": " · forced line break"
   },
   "bareLink": "Barebone version",
-  "fullLink": "Full version"
+  "fullLink": "Full version",
+  "repoLabel": "Source code",
+  "repoTitle": "Open source on GitHub",
+  "repoText": "franzmozzi/manicula · code, markup guide and build tools, public domain.",
+  "repoLink": "View on GitHub"
 }
