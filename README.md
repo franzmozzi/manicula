@@ -7,15 +7,18 @@ outline, line by line. The layout is recomputed live with [Pretext](https://gith
 ![Two pointing figures in the margins of an article, with the text wrapping around their outlines](docs/desktop.png)
 
 It is a self-contained prototype: every page is a single HTML file with no framework and no build
-step at runtime. Open `index.html` in a browser.
+step at runtime. Open `index.html` in a browser, or see the live demo:
+**[franzmozzi.github.io/manicula](https://franzmozzi.github.io/manicula/)**.
 
 ## Pages
 
+Each link opens the live page.
+
 | | Full (with controls) | Barebone |
 |---|---|---|
-| English (default) | [`index.html`](index.html) | [`barebone.html`](barebone.html) |
-| Italiano | [`it/index.html`](it/index.html) | [`it/barebone.html`](it/barebone.html) |
-| Deutsch | [`de/index.html`](de/index.html) | [`de/barebone.html`](de/barebone.html) |
+| English (default) | [`index.html`](https://franzmozzi.github.io/manicula/index.html) | [`barebone.html`](https://franzmozzi.github.io/manicula/barebone.html) |
+| Italiano | [`it/index.html`](https://franzmozzi.github.io/manicula/it/index.html) | [`it/barebone.html`](https://franzmozzi.github.io/manicula/it/barebone.html) |
+| Deutsch | [`de/index.html`](https://franzmozzi.github.io/manicula/de/index.html) | [`de/barebone.html`](https://franzmozzi.github.io/manicula/de/barebone.html) |
 
 - **Full** has a control bar for experimenting live. You can change each block's target, the
   column width, the figure size and the finger gap, and show the traced outline. A status line
