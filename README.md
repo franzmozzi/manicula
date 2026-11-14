@@ -1,6 +1,6 @@
 # Manicula
 
-Illustrated maniculae (☞, the pointing hands of medieval margins) for the web. Each figure hangs
+Illustrated maniculæ (☞, the pointing hands of medieval margins) for the web. Each figure hangs
 into the page margin and points at a marked word, and the text flows around the figure's real
 outline, line by line. The layout is recomputed live with [Pretext](https://github.com/chenglou/pretext).
 
@@ -71,7 +71,7 @@ Mark the spot directly in the text. Each block contains exactly one element with
 | `data-bleed` | px the figure hangs into the margin, 0 up to the page bleed | 85 (15 below 820 px) |
 
 Out-of-range values are clamped. `data-bleed` can only pull a figure inward, so a figure never
-leaves the viewport on a phone. On the full page, the "Maniculae" slider multiplies
+leaves the viewport on a phone. On the full page, the "Maniculæ" slider multiplies
 `data-scale`, and `data-gap` overrides the "Finger gap" slider for that block.
 
 ```html

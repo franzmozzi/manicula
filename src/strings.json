@@ -1,12 +1,12 @@
 {
-  "title": "Dynamic maniculae",
+  "title": "Dynamic maniculæ",
   "description": "Editorial prototype: illustrated maniculae that bleed into the margins, with the text flowing around their outline, computed in real time with Pretext.",
   "target1": "Target ¶1",
   "target2": "Target ¶2",
   "listItem": "List item",
   "target4": "Quote target",
   "column": "Column",
-  "maniculae": "Maniculae",
+  "maniculae": "Maniculæ",
   "fingerPad": "Finger gap",
   "showProfile": "Show outline",
   "js": {
@@ -15,7 +15,7 @@
     "termText": "“{label}”",
     "notFound": "{term} not found in the block.",
     "lineUnknown": "{term} found, but its line could not be located.",
-    "blocked": "{term}: the finger covers the whole column; shrink the maniculae or widen the column.",
+    "blocked": "{term}: the finger covers the whole column; shrink the maniculæ or widen the column.",
     "ok": "{term} → line {line} · {passes}",
     "passOne": "{n} pass",
     "passMany": "{n} passes",
