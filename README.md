@@ -107,7 +107,7 @@ The browser needs ES modules, Canvas 2D, `ResizeObserver`, `document.fonts` and
 ## Performance
 
 Lighthouse on the GitHub Pages demo scores 100 in all four categories on desktop. On mobile it
-gives 96 for Performance and 100 for the rest. The missing points most likely come from the two third-party
+gives 97 for Performance and 100 for the rest. The missing points most likely come from the two third-party
 requests on the critical path, which weigh more on the throttled mobile profile:
 
 - The Google Fonts stylesheet blocks rendering and adds two extra origins (`fonts.googleapis.com`
@@ -130,6 +130,11 @@ To reach 100 on mobile, serve both from the same origin as the pages:
 
 This also stops the demo from depending on third-party services and from sending them data
 about its visitors.
+
+The page's own JavaScript and CSS are inline and deliberately not minified: this is a prototype,
+and "view source" should show the layout engine as it is written in `src/template.html`.
+Minifying would make the page somewhat smaller, but it would not remove the third-party requests
+above.
 
 ## Development
 
