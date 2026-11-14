@@ -324,8 +324,20 @@
     }
     .article { padding-top: 32px; }
     .dek { font-size: 19px; margin-bottom: 28px; }
-    .controls { position: static; }   /* four targets make the bar too tall to stay pinned on a phone */
-/*full*/.controls input[type="text"], .controls select { width: 9.5rem; }/*/full*/
+/*bare*/.controls { position: static; }/*/bare*/
+/*full*/
+    /* One swipeable row, so the bar stays pinned without covering the text it changes. */
+    .controls form {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scrollbar-width: thin;
+      gap: 16px;
+      padding-block: 8px;
+    }
+    .controls form > * { flex: none; }
+    .controls input[type="text"], .controls select { width: 9.5rem; }
+/*/full*/
     .quote { font-size: 19px; padding-left: 14px; }
 /*full*/.controls .wide-only { display: none; }/*/full*/
   }
