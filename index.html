@@ -68,8 +68,8 @@
   }
   .controls label { display: grid; gap: 3px; color: var(--ink-soft); }
   .controls label > span { font-weight: 600; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
-  .controls input[type="text"],
-  .controls select {
+  .controls select,
+  .controls input[type="text"] {
     font: inherit;
     font-size: 15px;
     color: var(--ink);
@@ -79,8 +79,8 @@
     border-radius: 4px;
     background: #fff;
   }
-  .controls input[type="text"]:focus-visible,
   .controls select:focus-visible,
+  .controls input[type="text"]:focus-visible,
   .controls input[type="range"]:focus-visible,
   .controls input[type="checkbox"]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .controls input[type="range"] { width: 9rem; accent-color: var(--accent); }
@@ -324,7 +324,7 @@
     .controls form > label:not(.check) { flex: 1 1 0; min-width: 0; }
     .controls form > label:nth-of-type(-n + 4) { flex: 0 0 calc((100% - 24px) / 4); }
     .controls label > span { font-size: 11px; letter-spacing: 0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .controls input[type="text"], .controls select { box-sizing: border-box; width: 100%; min-width: 0; height: 32px; font-size: 16px; padding: 0 6px; }
+    .controls select, .controls input[type="text"] { box-sizing: border-box; width: 100%; min-width: 0; height: 32px; font-size: 16px; padding: 0 6px; }
     .controls input[type="range"] { width: 100%; }
     .controls .check { padding-bottom: 2px; }
     .controls .check > span { font-size: 13px; }
@@ -347,11 +347,11 @@
   <form id="controls" autocomplete="off" onsubmit="return false">
     <label>
       <span>Target ¶1</span>
-      <input type="text" id="target-1" list="targets-1" data-block="b-1">
+      <select id="target-1" data-block="b-1" data-suggest="targets-1"></select>
     </label>
     <label>
       <span>Target ¶2</span>
-      <input type="text" id="target-2" list="targets-2" data-block="b-2">
+      <select id="target-2" data-block="b-2" data-suggest="targets-2"></select>
     </label>
     <label>
       <span>List item</span>
@@ -359,7 +359,7 @@
     </label>
     <label>
       <span><span class="lbl-long">Quote target</span><span class="lbl-short">Quote</span></span>
-      <input type="text" id="target-4" list="targets-4" data-block="b-4">
+      <select id="target-4" data-block="b-4" data-suggest="targets-4"></select>
     </label>
     <label class="wide-only">
       <span>Column <output id="col-out" for="col-w"></output></span>
@@ -516,7 +516,7 @@
 <script type="module">
 import { prepareWithSegments, layoutNextLine, clearCache } from 'https://esm.sh/@chenglou/pretext@1.0.0?bundle';
 
-const T = {"noTarget": "No target: figure at the top of the block.", "termItem": "Item {label}", "termText": "“{label}”", "notFound": "{term} not found in the block.", "lineUnknown": "{term} found, but its line could not be located.", "blocked": "{term}: the finger covers the whole column; shrink the maniculæ or widen the column.", "ok": "{term} → line {line} · {passes}", "passOne": "{n} pass", "passMany": "{n} passes", "forcedBreak": " · forced line break", "missed": " · the finger misses the line by {err}px"};   // per-language UI strings, filled in by tools/build.py
+const T = {"noTarget": "No target: figure at the top of the block.", "termItem": "Item {label}", "termText": "“{label}”", "notFound": "{term} not found in the block.", "lineUnknown": "{term} found, but its line could not be located.", "blocked": "{term}: the finger covers the whole column; shrink the maniculæ or widen the column.", "ok": "{term} → line {line} · {passes}", "passOne": "{n} pass", "passMany": "{n} passes", "forcedBreak": " · forced line break", "missed": " · the finger misses the line by {err}px", "other": "Other…", "otherPlaceholder": "Any word or phrase"};   // per-language UI strings, filled in by tools/build.py
 const fmt = (str, vars) => str.replace(/\{(\w+)\}/g, (_, k) => vars[k]);
 
 const ALPHA_THRESHOLD = 20;   // alpha > 20 counts as ink
@@ -1100,12 +1100,62 @@ async function boot() {
 /* Controls                                                         */
 /* ---------------------------------------------------------------- */
 
+const OTHER = '\u0000other';
+
+// "Other…" swaps the select for a text field. The block follows the typing live; Enter or
+// leaving the field keeps the phrase as a new option, Escape or an empty field goes back.
+function bindOther(select, b) {
+  select.add(new Option(T.other, OTHER));
+  const field = Object.assign(document.createElement('input'), { type: 'text', hidden: true, placeholder: T.otherPlaceholder });
+  field.setAttribute('aria-label', T.otherPlaceholder);
+  field.setAttribute('aria-describedby', b.status.id);
+  select.after(field);
+  let last = select.value;
+  const close = (commit, refocus) => {
+    const value = commit ? normalize(field.value) : '';
+    if (value && ![...select.options].some((o) => o.value === value)) {
+      select.add(new Option(value, value), select.options.length - 1);
+    }
+    select.value = last = value || last;
+    field.hidden = true;
+    field.value = '';
+    select.hidden = false;
+    b.setTarget(last);
+    schedule(b);
+    if (refocus) select.focus();
+  };
+  select.addEventListener('input', () => {
+    if (select.value === OTHER) {
+      select.hidden = true;
+      field.hidden = false;
+      field.focus();
+      return;
+    }
+    last = select.value;
+    b.setTarget(last);
+    schedule(b);
+  });
+  field.addEventListener('input', () => { b.setTarget(field.value); schedule(b); });
+  field.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); close(true, true); }
+    else if (e.key === 'Escape') { e.preventDefault(); close(false, true); }
+  });
+  field.addEventListener('blur', () => { if (!field.hidden) close(true, false); });
+}
+
 function bindControls() {
   // Each target control names its block (data-block); it starts on the marked text or entry.
+  // Phrase targets list the suggestions of their datalist (data-suggest), list targets the entries.
   for (const input of document.querySelectorAll('[data-block]')) {
     const b = blocks.find((block) => block.el.id === input.dataset.block);
     if (!b) { input.disabled = true; continue; }
-    if (input.tagName === 'SELECT') {
+    if (input.dataset.suggest) {
+      // A select, not an input with a datalist: browsers filter a datalist by the current
+      // value, so a prefilled field would show no other suggestions.
+      const values = [...document.getElementById(input.dataset.suggest).options].map((o) => o.value);
+      if (!values.includes(b.markLabel)) values.unshift(b.markLabel);
+      for (const v of values) input.add(new Option(v, v));
+    } else {
       b.items.forEach((item, i) => {
         const words = item.text.split(' ');
         input.add(new Option(`${i + 1}. ${words.slice(0, 4).join(' ')}${words.length > 4 ? '…' : ''}`, String(i + 1)));
@@ -1113,7 +1163,8 @@ function bindControls() {
     }
     input.value = b.markLabel;
     input.setAttribute('aria-describedby', b.status.id);
-    input.addEventListener('input', () => { b.setTarget(input.value); schedule(b); });
+    if (input.dataset.suggest) bindOther(input, b);
+    else input.addEventListener('input', () => { b.setTarget(input.value); schedule(b); });
   }
 
   const col = document.getElementById('col-w');

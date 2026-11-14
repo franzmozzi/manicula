@@ -24,7 +24,9 @@
     "passOne": "{n} pass",
     "passMany": "{n} passes",
     "forcedBreak": " · forced line break",
-    "missed": " · the finger misses the line by {err}px"
+    "missed": " · the finger misses the line by {err}px",
+    "other": "Other…",
+    "otherPlaceholder": "Any word or phrase"
   },
   "bareLink": "Barebone version",
   "fullLink": "Full version",

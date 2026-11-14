@@ -410,7 +410,7 @@
 <script type="module">
 import { prepareWithSegments, layoutNextLine, clearCache } from 'https://esm.sh/@chenglou/pretext@1.0.0?bundle';
 
-const T = {"noTarget": "No target: figure at the top of the block.", "termItem": "Item {label}", "termText": "“{label}”", "notFound": "{term} not found in the block.", "lineUnknown": "{term} found, but its line could not be located.", "blocked": "{term}: the finger covers the whole column; shrink the maniculæ or widen the column.", "ok": "{term} → line {line} · {passes}", "passOne": "{n} pass", "passMany": "{n} passes", "forcedBreak": " · forced line break", "missed": " · the finger misses the line by {err}px"};   // per-language UI strings, filled in by tools/build.py
+const T = {"noTarget": "No target: figure at the top of the block.", "termItem": "Item {label}", "termText": "“{label}”", "notFound": "{term} not found in the block.", "lineUnknown": "{term} found, but its line could not be located.", "blocked": "{term}: the finger covers the whole column; shrink the maniculæ or widen the column.", "ok": "{term} → line {line} · {passes}", "passOne": "{n} pass", "passMany": "{n} passes", "forcedBreak": " · forced line break", "missed": " · the finger misses the line by {err}px", "other": "Other…", "otherPlaceholder": "Any word or phrase"};   // per-language UI strings, filled in by tools/build.py
 const fmt = (str, vars) => str.replace(/\{(\w+)\}/g, (_, k) => vars[k]);
 
 const ALPHA_THRESHOLD = 20;   // alpha > 20 counts as ink
