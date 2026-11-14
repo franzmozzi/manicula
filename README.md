@@ -104,6 +104,32 @@ For production, serve both from your own domain instead of the CDNs.
 The browser needs ES modules, Canvas 2D, `ResizeObserver`, `document.fonts` and
 `Intl.Segmenter`. Current Chrome, Edge, Firefox and Safari have all of them.
 
+## Performance
+
+Lighthouse on the GitHub Pages demo scores 100 in all four categories on desktop. On mobile it
+gives 96 for Performance and 100 for the rest. The missing points most likely come from the two third-party
+requests on the critical path, which weigh more on the throttled mobile profile:
+
+- The Google Fonts stylesheet blocks rendering and adds two extra origins (`fonts.googleapis.com`
+  for the CSS, `fonts.gstatic.com` for the files) before the text can be painted.
+- Pretext is fetched from esm.sh. Its entry module only re-exports seven more modules, so the
+  browser needs a second round of requests before it has the code.
+  The text cannot flow around the figures until the module has arrived.
+
+To reach 100 on mobile, serve both from the same origin as the pages:
+
+1. Download Source Sans 3 as WOFF2, regular and semibold, ideally subset to the Latin
+   characters used. Declare it with `@font-face` and `font-display: swap` inside the page's
+   `<style>`, and add `<link rel="preload" as="font" type="font/woff2" crossorigin>` for both
+   files. Then remove the Google Fonts `<link>` and `preconnect` tags.
+2. Bundle `@chenglou/pretext@1.0.0` into one local ES module, for example with
+   `npx esbuild --bundle --format=esm --minify`. Import it with a relative path and announce it
+   with `<link rel="modulepreload">`.
+3. Rebuild and run Lighthouse again with the mobile profile.
+
+This also stops the demo from depending on third-party services and from sending them data
+about its visitors.
+
 ## Development
 
 The pages are generated from `src/` and committed, so the repository can be served as is, for
