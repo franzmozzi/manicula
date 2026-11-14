@@ -112,9 +112,10 @@ requests on the critical path, which weigh more on the throttled mobile profile:
 
 - The Google Fonts stylesheet blocks rendering and adds two extra origins (`fonts.googleapis.com`
   for the CSS, `fonts.gstatic.com` for the files) before the text can be painted.
-- Pretext is fetched from esm.sh. Its entry module only re-exports seven more modules, so the
-  browser needs a second round of requests before it has the code.
-  The text cannot flow around the figures until the module has arrived.
+- Pretext is fetched from esm.sh. The pages already shorten this path: they `preconnect` to
+  esm.sh, ask for the `?bundle` build, which resolves to one file instead of seven modules, and
+  start it early with `modulepreload`. It still takes two requests to a third-party origin, and
+  the text cannot flow around the figures until the module has arrived.
 
 To reach 100 on mobile, serve both from the same origin as the pages:
 
