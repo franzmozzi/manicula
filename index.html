@@ -87,6 +87,7 @@
   .controls .check { display: flex; align-items: center; gap: 6px; padding-bottom: 4px; }
   .controls .check > span { text-transform: none; letter-spacing: 0; font-size: 14px; font-weight: 400; }
   .controls output { font-variant-numeric: tabular-nums; color: var(--ink); }
+  .controls .lbl-short { display: none; }
   .page-links {
     display: flex;
     align-items: center;
@@ -318,17 +319,19 @@
     }
     .article { padding-top: 32px; }
     .dek { font-size: 19px; margin-bottom: 28px; }
-    /* One swipeable row, so the bar stays pinned without covering the text it changes. */
-    .controls form {
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      overscroll-behavior-x: contain;
-      scrollbar-width: thin;
-      gap: 16px;
-      padding-block: 8px;
-    }
-    .controls form > * { flex: none; }
-    .controls input[type="text"], .controls select { width: 9.5rem; }
+    /* Two compact rows (targets, then sliders and toggles), so the pinned bar covers little text. */
+    .controls form { gap: 6px 8px; padding: 8px 16px; align-items: end; }
+    .controls form > label:not(.check) { flex: 1 1 0; min-width: 0; }
+    .controls form > label:nth-of-type(-n + 4) { flex: 0 0 calc((100% - 24px) / 4); }
+    .controls label > span { font-size: 11px; letter-spacing: 0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .controls input[type="text"], .controls select { box-sizing: border-box; width: 100%; min-width: 0; height: 32px; font-size: 16px; padding: 0 6px; }
+    .controls input[type="range"] { width: 100%; }
+    .controls .check { padding-bottom: 2px; }
+    .controls .check > span { font-size: 13px; }
+    .controls .page-links { margin-left: 0; padding-bottom: 3px; }
+    .controls .version-link { font-size: 12px; white-space: nowrap; }
+    .controls .lbl-long { display: none; }
+    .controls .lbl-short { display: inline; }
     .quote { font-size: 19px; padding-left: 14px; }
 .controls .wide-only { display: none; }  }
 
@@ -355,7 +358,7 @@
       <select id="item-3" data-block="b-3"></select>
     </label>
     <label>
-      <span>Quote target</span>
+      <span><span class="lbl-long">Quote target</span><span class="lbl-short">Quote</span></span>
       <input type="text" id="target-4" list="targets-4" data-block="b-4">
     </label>
     <label class="wide-only">
@@ -363,16 +366,16 @@
       <input type="range" id="col-w" min="320" max="780" step="10" value="640">
     </label>
     <label>
-      <span>Maniculæ <output id="zoom-out" for="mani-zoom"></output></span>
+      <span><span class="lbl-long">Maniculæ</span><span class="lbl-short">Size</span> <output id="zoom-out" for="mani-zoom"></output></span>
       <input type="range" id="mani-zoom" min="50" max="150" step="5" value="100">
     </label>
     <label>
-      <span>Finger gap <output id="pad-out" for="finger-pad"></output></span>
+      <span><span class="lbl-long">Finger gap</span><span class="lbl-short">Gap</span> <output id="pad-out" for="finger-pad"></output></span>
       <input type="range" id="finger-pad" min="0" max="40" step="1" value="14">
     </label>
     <label class="check">
       <input type="checkbox" id="show-profile">
-      <span>Show outline</span>
+      <span><span class="lbl-long">Show outline</span><span class="lbl-short">Outline</span></span>
     </label>
     <div class="page-links"><a class="version-link" href="barebone.html">Barebone version</a></div>
   </form>

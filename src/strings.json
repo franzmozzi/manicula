@@ -9,6 +9,10 @@
   "maniculae": "Maniculæ",
   "fingerPad": "Finger gap",
   "showProfile": "Show outline",
+  "target4Short": "Quote",
+  "maniculaeShort": "Size",
+  "fingerPadShort": "Gap",
+  "showProfileShort": "Outline",
   "js": {
     "noTarget": "No target: figure at the top of the block.",
     "termItem": "Item {label}",
