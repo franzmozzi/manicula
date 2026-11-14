@@ -1,0 +1,124 @@
+<!--full-->
+<datalist id="targets-1">
+  <option value="careless reader"></option>
+  <option value="outstretched finger"></option>
+  <option value="fifteenth century"></option>
+  <option value="gloss"></option>
+  <option value="nota bene"></option>
+</datalist>
+<datalist id="targets-2">
+  <option value="margin"></option>
+  <option value="printers"></option>
+  <option value="pointing finger"></option>
+  <option value="screen"></option>
+  <option value="sign"></option>
+</datalist>
+<datalist id="targets-4">
+  <option value="where to look"></option>
+  <option value="reader answers"></option>
+  <option value="summary"></option>
+  <option value="margin"></option>
+</datalist>
+<!--/full-->
+
+  <p class="kicker">Editorial prototype</p>
+  <h1>The finger in the margin</h1>
+  <p class="dek">A short history of the manicule, the hand-shaped sign that for centuries told readers where to stop and think.</p>
+
+  <section class="manicula-block" id="b-1" aria-labelledby="h-1">
+    <h2 id="h-1">A hand between the lines</h2>
+    <p>In medieval manuscripts and early printed books the margin was a workspace. Readers annotated, corrected and argued with the author, and when a passage deserved attention they drew a small hand with an outstretched finger. Scholars call it the manicule, and between the thirteenth and the fifteenth century it became one of the most common signs in book culture. It was not there to decorate: it was a reminder to oneself or a warning to the <mark data-manicula>careless reader</mark> who would come later. Some hands are bare, a few lines and a cuff; others wear embroidered sleeves, rings, even a whole face peering out of the gloss. The shape changed from scribe to scribe, but the gesture stayed the same: look here, this matters. In a sense the manicule is the ancestor of the nota bene, the highlighter and the underlined link, a way of telling the text that one part of it weighs more than the rest.</p>
+  </section>
+
+  <section class="manicula-block" id="b-2" aria-labelledby="h-2">
+    <h2 id="h-2">From parchment to screen</h2>
+    <p>With print the manicule moved from the reader’s pen to the type case. Printers cast it in lead and used it to flag notices, prices and paragraphs not to be missed; in the nineteenth century it loomed over posters and railway timetables. The gesture lost something along the way: the printed hand is always the same, and it no longer points at a precise line but at a whole block. This prototype tries to bring back the handwritten version. Each figure bleeds out of the <mark data-manicula>margin</mark> and points at a chosen word, and the text flows around it following the real outline of the drawing, line by line. When the column narrows or the typeface changes, the layout is recomputed and the pointing finger finds its word again. It is a way of remembering that a sign can be precise on screen too, as long as the text knows how to make room for whoever points at it.</p>
+  </section>
+
+  <section class="manicula-block" id="b-3" aria-labelledby="h-3">
+    <h2 id="h-3">How to read a manicule</h2>
+    <ul>
+      <li>Look where the finger points: it almost always marks a precise line, not the whole page.</li>
+      <li>Study the sleeve. Cuffs, buttons and embroidery change from hand to hand and often let you recognise the same reader across different books.</li>
+      <li data-manicula data-side="left" data-scale="125">Read the passage it marks and the lines around it, because whoever drew the hand wanted that sentence to be found again and quoted.</li>
+      <li>Look for other notes in the margin: a manicule is rarely alone and talks to underlinings, braces and short comments.</li>
+      <li>Compare its ink with the ink of the text. If they differ, the sign was added by a later reader.</li>
+    </ul>
+  </section>
+
+  <section class="manicula-block" id="b-4" aria-labelledby="h-4">
+    <h2 id="h-4">A note in the margin</h2>
+    <blockquote class="quote">
+      <p>The margin is not the empty space around the text: it is the place where the reader answers back. A small hand drawn there says more than a summary, because it does not explain what to think but shows <mark data-manicula data-scale="65" data-gap="24" data-bleed="40">where to look</mark>, and leaves the rest to whoever reads.</p>
+      <footer>Sample quotation written for this prototype.</footer>
+    </blockquote>
+  </section>
+
+  <section class="guide" aria-labelledby="h-guide">
+    <h2 id="h-guide">How to use the maniculae</h2>
+    <p>A manicule points at a single spot per block: a word or phrase in a paragraph or a quotation, or a whole entry in a list. You mark the spot directly in the text. The script takes care of the rest: the text column, the figure, and the line breaks around the outline.</p>
+
+<!--bare-->
+    <p>This is the barebone version: no control bar, outline or status lines. Column width, figure size and spacing use the defaults written in the stylesheet, and each block changes them only through the attributes of its mark. The <a href="index.html">full version</a> has the controls for trying values live.</p>
+<!--/bare-->
+
+    <h3>1. Mark the spot</h3>
+    <p>Wrap the block in a <code>&lt;section class="manicula-block"&gt;</code> and put <code>data-manicula</code> on a <code>&lt;mark&gt;</code> around the words to point at:</p>
+    <pre><code>&lt;section class="manicula-block"&gt;
+  &lt;h2&gt;A hand between the lines&lt;/h2&gt;
+  &lt;p&gt;… a warning to the &lt;mark data-manicula&gt;careless reader&lt;/mark&gt; who …&lt;/p&gt;
+&lt;/section&gt;</code></pre>
+    <p>The finger points at exactly that occurrence, even if the same words appear elsewhere in the paragraph.</p>
+
+    <h3>2. Lists and quotations</h3>
+    <p>In a list, mark the whole entry: the finger lines up with its first line and the entry takes the accent colour.</p>
+    <pre><code>&lt;ul&gt;
+  &lt;li&gt;…&lt;/li&gt;
+  &lt;li data-manicula&gt;Read the passage it marks …&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+    <p>A quotation is an ordinary paragraph inside a <code>&lt;blockquote&gt;</code>: the text keeps the quotation’s size and leading, and the border stays in place.</p>
+    <pre><code>&lt;blockquote class="quote"&gt;
+  &lt;p&gt;… but shows &lt;mark data-manicula data-scale="65" data-gap="24" data-bleed="40"&gt;where to look&lt;/mark&gt; …&lt;/p&gt;
+  &lt;footer&gt;Source&lt;/footer&gt;
+&lt;/blockquote&gt;</code></pre>
+
+    <h3>3. Attributes</h3>
+    <dl class="attrs">
+      <dt><code>data-side</code></dt>
+      <dd><code>left</code> or <code>right</code> (also <code>sx</code> and <code>dx</code>): the margin the figure bleeds into. Optional: without it, each block takes the side opposite to the previous one, starting on the left.</dd>
+      <dt><code>data-scale</code></dt>
+      <dd>Figure size as a percentage, from <code>25</code> to <code>200</code>; without the attribute it is <code>100</code>. Values outside the range are clamped to the nearest limit.<!--full--> The “Maniculae” slider in the top bar multiplies this scale for every figure.<!--/full--></dd>
+      <dt><code>data-gap</code></dt>
+      <dd>Space between the fingertip and the text, in pixels, from <code>0</code> to <code>60</code>. Without it the default applies: <code>14</code> on wide screens, <code>10</code> below 820 px.<!--full--> It takes precedence over the “Finger gap” slider for that block.<!--/full--></dd>
+      <dt><code>data-bleed</code></dt>
+      <dd>How far the figure hangs into the margin, in pixels. The default, and the maximum, is the page bleed: <code>85</code> on wide screens, <code>15</code> below 820 px. A lower value pulls the figure toward the text, so the lines beside it get shorter.</dd>
+    </dl>
+
+    <h3>4. What happens on its own</h3>
+    <ul>
+      <li>The figure’s outline is read from its pixels, and each line is shortened just enough not to touch it. The part that bleeds into the margin takes no room from the text.</li>
+      <li>The figure moves vertically until the fingertip sits on the middle of the marked line. If the line keeps sliding up and down, a line break is forced just before the marked words, as a compositor would do.<!--full--> The status line under the block says so.<!--/full--></li>
+      <li>The layout is recomputed when the column width, the window or the typeface changes, and when crossing 820 px. On narrow screens the figure shrinks and bleeds less.</li>
+    </ul>
+
+    <h3>5. Tips</h3>
+    <ul>
+      <li>Use one manicule per block. If you need two, split the text into two blocks: the sides will alternate on their own.</li>
+      <li>Mark only a few words. A long phrase wraps, and the finger points at the line where it starts.</li>
+      <li>Avoid marking the very first words of a block: the figure would have to rise above the text, so the text is pushed down instead.</li>
+      <li>With large figures and narrow columns the finger can cover the whole line. <!--full-->The status then says “the finger covers the whole column”: lower <code>data-scale</code> or widen the column.<!--/full--><!--bare-->In that case lower <code>data-scale</code> or <code>data-gap</code>.<!--/bare--></li>
+    </ul>
+
+    <h3>6. Accessibility and search engines</h3>
+    <p>The original text, with its <code>&lt;mark&gt;</code>, stays in the DOM in a visually hidden element. The visible lines are <code>&lt;span&gt;</code> elements positioned with <code>translate3d</code> inside an <code>aria-hidden</code> container, and the figures are decorative for screen readers too. If the script or the network is unavailable, the block stays an ordinary paragraph with the words highlighted.</p>
+
+    <h3>7. Dependencies</h3>
+    <p>The page is a single HTML file with no framework and no build step at runtime. It loads only two external resources:</p>
+    <ul>
+      <li><strong>Pretext</strong> (<code>@chenglou/pretext</code>, pinned to version <code>1.0.0</code>), imported as an ES module from <code>esm.sh</code>. It computes line breaks without reading the DOM layout; the page uses <code>prepareWithSegments</code>, <code>layoutNextLine</code> and <code>clearCache</code>.</li>
+      <li><strong>Source Sans 3</strong> (weights 400 and 600) from Google Fonts. Pretext measures text with the actual typeface, so the layout is redone once the font has loaded.</li>
+    </ul>
+    <p>The two figures are SVGs embedded in the page and turned into data URLs on load: they need no other files. The browser must support ES modules, Canvas 2D (to read the outline), <code>ResizeObserver</code>, <code>document.fonts</code> and <code>Intl.Segmenter</code>, all available in current versions of Chrome, Edge, Firefox and Safari.</p>
+    <p>Without a network the two external resources do not arrive: the text stays readable as ordinary paragraphs, but without figures or flow around the outline. In production it is better to serve Pretext and the font from your own domain rather than from a CDN, so as not to depend on third-party services or send them data about your visitors.</p>
+    <p>The development tools in the <code>tools/</code> folder are not needed by the page. Deriving the SVGs from the image requires Python with numpy, Pillow, SciPy and vtracer; the automated tests require Chromium and websocket-client.</p>
+  </section>

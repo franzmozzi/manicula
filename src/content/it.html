@@ -1,0 +1,124 @@
+<!--full-->
+<datalist id="targets-1">
+  <option value="lettore distratto"></option>
+  <option value="indice teso"></option>
+  <option value="Quattrocento"></option>
+  <option value="glossa"></option>
+  <option value="nota bene"></option>
+</datalist>
+<datalist id="targets-2">
+  <option value="margine"></option>
+  <option value="tipografi"></option>
+  <option value="dito puntato"></option>
+  <option value="schermo"></option>
+  <option value="segno"></option>
+</datalist>
+<datalist id="targets-4">
+  <option value="dove guardare"></option>
+  <option value="lettore risponde"></option>
+  <option value="riassunto"></option>
+  <option value="margine"></option>
+</datalist>
+<!--/full-->
+
+  <p class="kicker">Prototipo editoriale</p>
+  <h1>Il dito nel margine</h1>
+  <p class="dek">Breve storia della manicula, il segno a forma di mano che per secoli ha indicato ai lettori dove fermarsi a pensare.</p>
+
+  <section class="manicula-block" id="b-1" aria-labelledby="h-1">
+    <h2 id="h-1">Una mano tra le righe</h2>
+    <p>Nei codici medievali e nei primi libri a stampa il margine era uno spazio di lavoro. Chi leggeva annotava, correggeva, discuteva con l’autore, e quando un passo meritava attenzione disegnava una piccola mano con l’indice teso. Gli studiosi la chiamano manicula, e tra il Duecento e il Quattrocento diventa uno dei segni più diffusi nella cultura del libro. Non serviva a decorare: era un promemoria per sé o un avvertimento al <mark data-manicula>lettore distratto</mark> che sarebbe venuto dopo. Alcune mani sono essenziali, poche linee e un polsino; altre portano maniche ricamate, anelli, persino un volto intero che sporge dalla glossa. La forma cambiava da copista a copista, ma il gesto restava lo stesso: guarda qui, questo conta. In un certo senso la manicula è l’antenato del nota bene, dell’evidenziatore e del link sottolineato, un modo di dire al testo che una sua parte pesa più delle altre.</p>
+  </section>
+
+  <section class="manicula-block" id="b-2" aria-labelledby="h-2">
+    <h2 id="h-2">Dalla pergamena allo schermo</h2>
+    <p>Con la stampa la manicula passa dalla penna del lettore alla cassa dei caratteri. I tipografi la fondono in piombo e la usano per richiamare avvisi, prezzi e paragrafi da non perdere; nell’Ottocento campeggia nei manifesti e negli orari ferroviari. Il gesto però perde qualcosa: la mano stampata è sempre uguale, non indica più una riga precisa ma un intero blocco. Questo prototipo prova a recuperare la versione manoscritta. Ogni figura sporge dal <mark data-manicula>margine</mark> e punta una parola scelta, e il testo le scorre attorno seguendo il profilo reale del disegno, riga per riga. Quando la colonna si stringe o il carattere cambia, il layout viene ricalcolato e il dito puntato ritrova la sua parola. È un modo per ricordare che anche sullo schermo un segno può essere preciso, purché il testo sappia fare spazio a chi lo indica.</p>
+  </section>
+
+  <section class="manicula-block" id="b-3" aria-labelledby="h-3">
+    <h2 id="h-3">Come leggere una manicula</h2>
+    <ul>
+      <li>Guarda dove punta l’indice: quasi sempre indica una riga precisa, non l’intera pagina.</li>
+      <li>Osserva la manica. Polsini, bottoni e ricami cambiano da mano a mano e spesso permettono di riconoscere lo stesso lettore in libri diversi.</li>
+      <li data-manicula data-side="left" data-scale="125">Leggi il passo indicato e le righe che lo circondano, perché chi disegnava la mano voleva che quella frase venisse ritrovata e citata.</li>
+      <li>Cerca le altre note sul margine: la manicula raramente è sola e dialoga con sottolineature, graffe e brevi commenti.</li>
+      <li>Confronta l’inchiostro con quello del testo. Se è diverso, il segno è stato aggiunto da un lettore venuto dopo.</li>
+    </ul>
+  </section>
+
+  <section class="manicula-block" id="b-4" aria-labelledby="h-4">
+    <h2 id="h-4">Una nota a margine</h2>
+    <blockquote class="quote">
+      <p>Il margine non è lo spazio vuoto attorno al testo: è il posto dove il lettore risponde. Una piccola mano disegnata lì dice più di un riassunto, perché non spiega che cosa pensare ma indica <mark data-manicula data-scale="65" data-gap="24" data-bleed="40">dove guardare</mark>, e lascia il resto a chi legge.</p>
+      <footer>Citazione di esempio scritta per questo prototipo.</footer>
+    </blockquote>
+  </section>
+
+  <section class="guide" aria-labelledby="h-guide">
+    <h2 id="h-guide">Guida all’uso delle manicule</h2>
+    <p>Una manicula indica un solo punto per blocco: una parola o una frase in un paragrafo o in una citazione, oppure una voce intera in una lista. Il punto si marca direttamente nel testo. Al resto (colonna di testo, figura, a capo attorno alla sagoma) pensa lo script.</p>
+
+<!--bare-->
+    <p>Questa è la versione essenziale: niente barra dei controlli, sagoma o righe di stato. Larghezza della colonna, dimensione delle figure e distanze usano i valori scritti nel foglio di stile, e ogni blocco li cambia solo con gli attributi del suo mark. La <a href="index.html">versione completa</a> ha i controlli per provare i valori dal vivo.</p>
+<!--/bare-->
+
+    <h3>1. Marcare il punto</h3>
+    <p>Racchiudi il blocco in una <code>&lt;section class="manicula-block"&gt;</code> e metti <code>data-manicula</code> su un <code>&lt;mark&gt;</code> attorno alle parole da indicare:</p>
+    <pre><code>&lt;section class="manicula-block"&gt;
+  &lt;h2&gt;Una mano tra le righe&lt;/h2&gt;
+  &lt;p&gt;… un avvertimento al &lt;mark data-manicula&gt;lettore distratto&lt;/mark&gt; che …&lt;/p&gt;
+&lt;/section&gt;</code></pre>
+    <p>Il dito punta esattamente quella occorrenza, anche se le stesse parole compaiono altrove nel paragrafo.</p>
+
+    <h3>2. Liste e citazioni</h3>
+    <p>In una lista marca la voce intera: il dito si allinea alla sua prima riga e la voce prende il colore d’accento.</p>
+    <pre><code>&lt;ul&gt;
+  &lt;li&gt;…&lt;/li&gt;
+  &lt;li data-manicula&gt;Leggi il passo indicato …&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+    <p>Una citazione è un normale paragrafo dentro una <code>&lt;blockquote&gt;</code>: il testo segue il corpo e l’interlinea della citazione, e il bordo resta al suo posto.</p>
+    <pre><code>&lt;blockquote class="quote"&gt;
+  &lt;p&gt;… ma indica &lt;mark data-manicula data-scale="65" data-gap="24" data-bleed="40"&gt;dove guardare&lt;/mark&gt; …&lt;/p&gt;
+  &lt;footer&gt;Fonte&lt;/footer&gt;
+&lt;/blockquote&gt;</code></pre>
+
+    <h3>3. Attributi</h3>
+    <dl class="attrs">
+      <dt><code>data-side</code></dt>
+      <dd><code>left</code> o <code>right</code> (anche <code>sx</code> e <code>dx</code>): il margine da cui sporge la figura. È facoltativo: senza, ogni blocco prende il lato opposto a quello precedente, a partire da sinistra.</dd>
+      <dt><code>data-scale</code></dt>
+      <dd>Dimensione della figura in percentuale, da <code>25</code> a <code>200</code>; senza attributo vale <code>100</code>. I valori fuori intervallo vengono riportati al limite più vicino.<!--full--> Lo slider «Manicule» della barra in alto moltiplica questa scala per tutte le figure.<!--/full--></dd>
+      <dt><code>data-gap</code></dt>
+      <dd>Spazio tra la punta del dito e il testo, in pixel, da <code>0</code> a <code>60</code>. Senza attributo vale il default: <code>14</code> su schermi larghi, <code>10</code> sotto gli 820 px.<!--full--> Per quel blocco ha la precedenza sullo slider «Distanza dito».<!--/full--></dd>
+      <dt><code>data-bleed</code></dt>
+      <dd>Quanto la figura sporge nel margine, in pixel. Il default, che è anche il massimo, è la sporgenza della pagina: <code>85</code> su schermi larghi, <code>15</code> sotto gli 820 px. Un valore più basso avvicina la figura al testo, e le righe accanto si accorciano.</dd>
+    </dl>
+
+    <h3>4. Cosa succede da solo</h3>
+    <ul>
+      <li>La sagoma della figura viene letta dai suoi pixel e ogni riga si accorcia quanto basta per non toccarla. La parte che sporge nel margine non toglie spazio al testo.</li>
+      <li>La figura si sposta in verticale finché la punta del dito non cade al centro della riga marcata. Se la riga continua a scivolare su e giù, viene forzato un a capo appena prima delle parole marcate, come farebbe un compositore.<!--full--> La riga di stato sotto il blocco lo segnala.<!--/full--></li>
+      <li>Il layout si ricalcola quando cambiano la larghezza della colonna, la finestra o il carattere, e al passaggio sotto gli 820 px. Su schermi stretti la figura si rimpicciolisce e sporge meno.</li>
+    </ul>
+
+    <h3>5. Consigli</h3>
+    <ul>
+      <li>Usa una sola manicula per blocco. Se ne servono due, dividi il testo in due blocchi: i lati si alterneranno da soli.</li>
+      <li>Marca poche parole. Una frase lunga va a capo e il dito indica la riga in cui comincia.</li>
+      <li>Evita di marcare le primissime parole di un blocco: la figura dovrebbe salire sopra il testo, e il testo viene invece spostato in basso.</li>
+      <li>Con figure grandi e colonne strette il dito può coprire l’intera riga. <!--full-->In quel caso lo stato dice «il dito copre tutta la colonna»: riduci <code>data-scale</code> o allarga la colonna.<!--/full--><!--bare-->In quel caso riduci <code>data-scale</code> o <code>data-gap</code>.<!--/bare--></li>
+    </ul>
+
+    <h3>6. Accessibilità e motori di ricerca</h3>
+    <p>Il testo originale, con il suo <code>&lt;mark&gt;</code>, resta nel DOM in un elemento nascosto solo visivamente. Le righe visibili sono <code>&lt;span&gt;</code> posizionati con <code>translate3d</code> dentro un contenitore <code>aria-hidden</code>, e anche le figure sono decorative per gli screen reader. Se lo script o la rete non sono disponibili, il blocco resta un normale paragrafo con le parole evidenziate.</p>
+
+    <h3>7. Dipendenze</h3>
+    <p>La pagina è un unico file HTML senza framework né passaggi di compilazione. Carica due sole risorse esterne:</p>
+    <ul>
+      <li><strong>Pretext</strong> (<code>@chenglou/pretext</code>, versione <code>1.0.0</code> fissata), importato come modulo ES da <code>esm.sh</code>. Calcola gli a capo senza leggere il layout del DOM; servono <code>prepareWithSegments</code>, <code>layoutNextLine</code> e <code>clearCache</code>.</li>
+      <li><strong>Source Sans 3</strong> (pesi 400 e 600) da Google Fonts. Pretext misura il testo con il carattere effettivo, quindi il layout viene rifatto quando il font finisce di caricarsi.</li>
+    </ul>
+    <p>Le due figure sono SVG incorporati nella pagina e trasformati in data URL al caricamento: non richiedono altri file. Dal browser servono moduli ES, Canvas 2D (per leggere la sagoma), <code>ResizeObserver</code>, <code>document.fonts</code> e <code>Intl.Segmenter</code>, tutti presenti nelle versioni attuali di Chrome, Edge, Firefox e Safari.</p>
+    <p>Senza rete le due risorse esterne non arrivano: il testo resta leggibile come paragrafi normali, ma senza figure né scorrimento attorno alla sagoma. In produzione conviene servire Pretext e il font dal proprio dominio, invece che da CDN, per non dipendere da servizi esterni né inviare loro dati sui visitatori.</p>
+    <p>Gli strumenti di sviluppo nella cartella <code>tools/</code> non servono alla pagina. Ricavare gli SVG dall’immagine richiede Python con numpy, Pillow, SciPy e vtracer; i test automatici richiedono Chromium e websocket-client.</p>
+  </section>

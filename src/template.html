@@ -1,0 +1,1033 @@
+<!doctype html>
+<html lang="{{LANG}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{t:title}}</title>
+<meta name="description" content="{{t:description}}">
+{{ALTERNATES}}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #faf9f6;
+    --ink: #1e1e1e;
+    --ink-soft: #5b5650;
+    --rule: #e4e0d8;
+    --accent: #8a4b1f;
+    --mark: #f4e4b8;
+    --bar-bg: rgba(250, 249, 246, 0.94);
+
+    --col-w: 640px;       /* text column width */
+    --mani-w: 250px;      /* rendered manicula width */
+    --bleed: 85px;        /* how far the manicula hangs into the outer margin (left: -85px / right: -85px) */
+    --finger-pad: 14px;   /* safety gap between the figure and the first letter */
+    --gutter: 24px;
+
+    color-scheme: light;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Source Sans 3", "Source Sans Pro", system-ui, sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 1.6;
+    overflow-x: clip;
+  }
+
+  /* ---------- control bar ---------- */
+  .controls {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--bar-bg);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--rule);
+    font-size: 14px;
+    line-height: 1.3;
+  }
+  .controls form, .controls .bar-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 10px 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 10px 16px;
+  }
+/*full*/
+  .controls label { display: grid; gap: 3px; color: var(--ink-soft); }
+  .controls label > span { font-weight: 600; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
+  .controls input[type="text"],
+  .controls select {
+    font: inherit;
+    font-size: 15px;
+    color: var(--ink);
+    width: 10.5rem;
+    padding: 5px 8px;
+    border: 1px solid #cfc9be;
+    border-radius: 4px;
+    background: #fff;
+  }
+  .controls input[type="text"]:focus-visible,
+  .controls select:focus-visible,
+  .controls input[type="range"]:focus-visible,
+  .controls input[type="checkbox"]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .controls input[type="range"] { width: 9rem; accent-color: var(--accent); }
+  .controls .check { display: flex; align-items: center; gap: 6px; padding-bottom: 4px; }
+  .controls .check > span { text-transform: none; letter-spacing: 0; font-size: 14px; font-weight: 400; }
+  .controls output { font-variant-numeric: tabular-nums; color: var(--ink); }
+/*/full*/
+  .page-links {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-left: auto;
+  }
+  .version-link { color: var(--ink-soft); font-size: 13px; text-underline-offset: 3px; }
+  .version-link:hover { color: var(--ink); }
+  .lang-switch {
+    display: flex;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .lang-switch a {
+    padding: 5px 10px;
+    color: var(--ink-soft);
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+  }
+  .lang-switch a + a { border-left: 1px solid var(--rule); }
+  .lang-switch a:hover { color: var(--ink); background: rgba(0, 0, 0, 0.04); }
+  .lang-switch a[aria-current="page"] { color: #fff; background: var(--accent); }
+  .lang-switch a:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+  /* ---------- article ---------- */
+  .article {
+    /* leave room on both sides for the bleed so nothing gets clipped or scrolls horizontally */
+    width: min(var(--col-w), 100% - 2 * (var(--bleed) + var(--gutter)));
+    margin: 0 auto;
+    padding: 56px 0 96px;
+    overflow: visible;
+  }
+
+  .kicker {
+    margin: 0 0 6px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  h1 {
+    margin: 0 0 12px;
+    font-size: clamp(34px, 6vw, 52px);
+    line-height: 1.05;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+  .dek {
+    margin: 0 0 40px;
+    font-size: 21px;
+    line-height: 1.45;
+    color: var(--ink-soft);
+    max-width: 34em;
+  }
+  h2 {
+    margin: 48px 0 16px;
+    font-size: 24px;
+    line-height: 1.25;
+    font-weight: 600;
+  }
+
+  /* ---------- manicula block ---------- */
+  .manicula-block {
+    position: relative;
+    overflow: visible;
+    margin: 0 0 8px;
+  }
+
+  .flow {
+    position: relative;
+    overflow: visible;
+    /* height is set by the layout engine */
+  }
+
+  .flow .line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    white-space: pre;
+    will-change: transform;
+  }
+
+  .seo-text mark { background: var(--mark); color: inherit; }   /* plain-text fallback */
+  .flow mark {
+    background: var(--mark);
+    color: inherit;
+    border-radius: 2px;
+    box-shadow: 0 0 0 2px var(--mark);
+  }
+
+  .manicula {
+    position: absolute;
+    top: 0;
+    width: calc(var(--mani-w) * var(--mani-scale, 1) * var(--mani-zoom, 1));
+    height: auto;
+    pointer-events: none;
+    user-select: none;
+    will-change: transform;
+  }
+  .manicula-block[data-side="left"] .manicula,
+  .manicula-block[data-side="left"] .profile-overlay { left: calc(var(--bleed) * -1); }   /* desktop: left: -85px */
+  .manicula-block[data-side="right"] .manicula,
+  .manicula-block[data-side="right"] .profile-overlay { right: calc(var(--bleed) * -1); } /* desktop: right: -85px */
+
+/*full*/
+  .profile-overlay {
+    position: absolute;
+    top: 0;
+    width: calc(var(--mani-w) * var(--mani-scale, 1) * var(--mani-zoom, 1));
+    overflow: visible;
+    pointer-events: none;
+    display: none;
+  }
+  .show-profile .profile-overlay { display: block; }
+  .show-profile .flow .line { outline: 1px dashed rgba(138, 75, 31, 0.35); outline-offset: -1px; }
+/*/full*/
+
+
+  /* list block: hanging bullets, entries separated by a small gap */
+  .manicula-block[data-kind="list"] { --item-indent: 26px; --item-gap: 10px; }
+  ul.seo-text { padding-left: 26px; }
+  ul.seo-text li + li { margin-top: 10px; }
+  .flow .line.has-marker::before {
+    content: "•";
+    position: absolute;
+    left: calc(var(--item-indent) * -0.7);
+    color: var(--ink-soft);
+  }
+  .flow .line.is-pointed { color: var(--accent); }
+  .flow .line.is-pointed.has-marker::before { color: var(--accent); font-weight: 600; }
+
+  /* quotation block */
+  .quote {
+    margin: 0;
+    padding: 2px 0 2px 20px;
+    border-left: 3px solid var(--accent);
+    font-size: 22px;
+    line-height: 1.5;
+  }
+  .quote .seo-text { margin: 0; }
+  .quote footer {
+    margin-top: 12px;
+    font-size: 15px;
+    line-height: 1.4;
+    color: var(--ink-soft);
+  }
+
+/*full*/
+  .block-status {
+    margin: 4px 0 0;
+    min-height: 1.3em;
+    font-size: 13px;
+    line-height: 1.3;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .manicula-block[data-side="right"] .block-status { text-align: right; }
+/*/full*/
+
+  /* SEO / a11y source text: visually hidden once Pretext has hydrated the block */
+  .is-hydrated .seo-text {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+  .seo-text { margin: 0 0 1em; }
+
+  .guide {
+    margin: 72px 0 0;
+    padding-top: 8px;
+    border-top: 1px solid var(--rule);
+  }
+  .guide h2 { margin-top: 32px; }
+  .guide h3 {
+    margin: 32px 0 8px;
+    font-size: 18px;
+    line-height: 1.4;
+    font-weight: 600;
+  }
+  .guide p, .guide ul { margin: 0 0 12px; }
+  .guide ul { padding-left: 22px; }
+  .guide li + li { margin-top: 6px; }
+  .guide code {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 0.86em;
+  }
+  .guide pre {
+    margin: 0 0 14px;
+    padding: 12px 14px;
+    overflow-x: auto;
+    background: #f1eee7;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .guide pre code { font-size: 14px; }
+  .attrs { margin: 0 0 12px; }
+  .attrs dt { margin-top: 10px; font-weight: 600; }
+  .attrs dd { margin: 2px 0 0 22px; }
+
+  @media (max-width: 820px) {
+    :root {
+      --mani-w: 150px;
+      --bleed: 15px;     /* mobile: left/right: -15px */
+      --finger-pad: 10px;
+      --gutter: 1px;     /* 15px bleed + 1px = 16px side gutter */
+    }
+    .article { padding-top: 32px; }
+    .dek { font-size: 19px; margin-bottom: 28px; }
+    .controls { position: static; }   /* four targets make the bar too tall to stay pinned on a phone */
+/*full*/.controls input[type="text"], .controls select { width: 9.5rem; }/*/full*/
+    .quote { font-size: 19px; padding-left: 14px; }
+/*full*/.controls .wide-only { display: none; }/*/full*/
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .manicula, .profile-overlay { transition: transform 220ms cubic-bezier(.2, .7, .2, 1); }
+    .is-resizing .manicula, .is-resizing .profile-overlay { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="controls">
+<!--full-->
+  <form id="controls" autocomplete="off" onsubmit="return false">
+    <label>
+      <span>{{t:target1}}</span>
+      <input type="text" id="target-1" list="targets-1" data-block="b-1">
+    </label>
+    <label>
+      <span>{{t:target2}}</span>
+      <input type="text" id="target-2" list="targets-2" data-block="b-2">
+    </label>
+    <label>
+      <span>{{t:listItem}}</span>
+      <select id="item-3" data-block="b-3"></select>
+    </label>
+    <label>
+      <span>{{t:target4}}</span>
+      <input type="text" id="target-4" list="targets-4" data-block="b-4">
+    </label>
+    <label class="wide-only">
+      <span>{{t:column}} <output id="col-out" for="col-w"></output></span>
+      <input type="range" id="col-w" min="320" max="780" step="10" value="640">
+    </label>
+    <label>
+      <span>{{t:maniculae}} <output id="zoom-out" for="mani-zoom"></output></span>
+      <input type="range" id="mani-zoom" min="50" max="150" step="5" value="100">
+    </label>
+    <label>
+      <span>{{t:fingerPad}} <output id="pad-out" for="finger-pad"></output></span>
+      <input type="range" id="finger-pad" min="0" max="40" step="1" value="14">
+    </label>
+    <label class="check">
+      <input type="checkbox" id="show-profile">
+      <span>{{t:showProfile}}</span>
+    </label>
+    <div class="page-links">{{PAGE_LINKS}}</div>
+  </form>
+<!--/full--><!--bare-->
+  <div class="bar-inner">
+    <div class="page-links">{{PAGE_LINKS}}</div>
+  </div>
+<!--/bare-->
+</header>
+
+<main class="article">
+{{CONTENT}}
+</main>
+
+<!-- Line-art traced from the reference illustration; read as text and turned into data URLs at runtime. -->
+<script type="image/svg+xml" id="svg-left">{{SVG_LEFT}}</script>
+<script type="image/svg+xml" id="svg-right">{{SVG_RIGHT}}</script>
+
+<script type="module">
+import { prepareWithSegments, layoutNextLine, clearCache } from 'https://esm.sh/@chenglou/pretext@1.0.0';
+
+const T = {{STRINGS}};   // per-language UI strings, filled in by tools/build.py
+const fmt = (str, vars) => str.replace(/\{(\w+)\}/g, (_, k) => vars[k]);
+
+const ALPHA_THRESHOLD = 20;   // alpha > 20 counts as ink
+const SCAN_WIDTH = 360;       // offscreen canvas width used for pixel scanning
+const MIN_LINE_WIDTH = 72;    // narrower bands are left empty instead of squeezing a word in
+const MAX_PASSES = 4;         // convergence cap (2 passes are enough in the common case)
+const BAND_SLACK = 3;         // extra vertical px checked above/below each line band
+
+/* ---------------------------------------------------------------- */
+/* Assets                                                           */
+/* ---------------------------------------------------------------- */
+
+function svgDataUrl(id) {
+  const source = document.getElementById(id).textContent.trim();
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(source);
+}
+
+async function loadInto(img, url) {
+  img.src = url;
+  await img.decode();
+  return img;
+}
+
+/**
+ * Draws the image on an offscreen canvas and scans it row by row.
+ * For side 'left' the figure sits left of the text, so the edge facing the
+ * text is the right-most inked pixel; for 'right' it is the left-most one.
+ * Returns, for every row, how far the ink reaches toward the text as a
+ * fraction [0..1] of the image width (0 = empty row).
+ */
+export function extractSilhouetteProfile(imgEl, side) {
+  const w = SCAN_WIDTH;
+  const h = Math.round(w * imgEl.naturalHeight / imgEl.naturalWidth);
+  const canvas = document.createElement('canvas');
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d', { willReadFrequently: true });
+  ctx.drawImage(imgEl, 0, 0, w, h);
+  const { data } = ctx.getImageData(0, 0, w, h);
+
+  const rows = new Float32Array(h);
+  for (let y = 0; y < h; y++) {
+    const base = y * w * 4;
+    if (side === 'left') {
+      for (let x = w - 1; x >= 0; x--) {
+        if (data[base + x * 4 + 3] > ALPHA_THRESHOLD) { rows[y] = (x + 1) / w; break; }
+      }
+    } else {
+      for (let x = 0; x < w; x++) {
+        if (data[base + x * 4 + 3] > ALPHA_THRESHOLD) { rows[y] = (w - x) / w; break; }
+      }
+    }
+  }
+  return { side, rows, scanWidth: w, scanHeight: h };
+}
+
+/**
+ * The fingertip is where the profile reaches furthest toward the text.
+ * Takes the contiguous run of rows within ~1.5 scan px of the maximum
+ * around the argmax and returns its centre, normalised to [0..1].
+ */
+export function findFingerTipAnchor(profile) {
+  const { rows, scanWidth } = profile;
+  let peak = 0;
+  for (let i = 1; i < rows.length; i++) if (rows[i] > rows[peak]) peak = i;
+  const tolerance = 1.5 / scanWidth;
+  let a = peak, b = peak;
+  while (a > 0 && rows[a - 1] >= rows[peak] - tolerance) a--;
+  while (b < rows.length - 1 && rows[b + 1] >= rows[peak] - tolerance) b++;
+  return { y: ((a + b) / 2 + 0.5) / rows.length, extent: rows[peak] };
+}
+
+/* ---------------------------------------------------------------- */
+/* Text helpers                                                     */
+/* ---------------------------------------------------------------- */
+
+const normalize = (s) => s.replace(/\s+/g, ' ').trim();
+const graphemes = new Intl.Segmenter('it', { granularity: 'grapheme' });
+
+/** Maps Pretext cursors back to UTF-16 offsets in the source string. */
+function buildCursorMapper(prepared, text) {
+  const segs = prepared.segments;
+  const offsets = new Array(segs.length + 1);
+  offsets[0] = 0;
+  for (let i = 0; i < segs.length; i++) offsets[i + 1] = offsets[i] + segs[i].length;
+  if (offsets[segs.length] !== text.length || segs.join('') !== text) {
+    console.warn('[manicula] segments do not reproduce the source text; target matching may drift');
+  }
+  return ({ segmentIndex, graphemeIndex }) => {
+    const base = offsets[Math.min(segmentIndex, segs.length)];
+    if (!graphemeIndex || segmentIndex >= segs.length) return base;
+    let n = 0, chars = 0;
+    for (const { segment } of graphemes.segment(segs[segmentIndex])) {
+      if (n++ === graphemeIndex) break;
+      chars += segment.length;
+    }
+    return base + chars;
+  };
+}
+
+function findTarget(text, target) {
+  const needle = normalize(target ?? '').toLocaleLowerCase('it');
+  if (!needle) return null;
+  const at = text.toLocaleLowerCase('it').indexOf(needle);
+  return at < 0 ? null : { start: at, end: at + needle.length };
+}
+
+/* ---------------------------------------------------------------- */
+/* Block                                                            */
+/* ---------------------------------------------------------------- */
+
+const LINE_START = Object.freeze({ segmentIndex: 0, graphemeIndex: 0 });
+
+/**
+ * A block is a run of one or more items (one paragraph, a quotation, or the
+ * entries of a list) flowed as a single column around one figure. Characters
+ * are addressed with block-wide offsets: item i covers [base, base + length).
+ */
+class ManiculaBlock {
+  /**
+   * Authoring markup: a section.manicula-block holding one <p> or <ul>/<ol> (optionally inside a
+   * <blockquote>) with exactly one [data-manicula] element: a <mark> around the words to point
+   * at, or the <li> to point at. Optional on that element:
+   *   data-side="left|right" (also sx|dx)  default: opposite of the previous block, first is left
+   *   data-scale="25..200"                 figure size in percent, default 100
+   * The flow container, figure, profile overlay and status line are generated here.
+   */
+  constructor(el, index, prevSide) {
+    this.el = el;
+    el.id ||= `manicula-${index + 1}`;
+    const marker = el.querySelector('[data-manicula]');
+    if (!marker) throw new Error(`#${el.id}: no [data-manicula] element`);
+    const source = marker.closest('p, ul, ol');
+    source.classList.add('seo-text');
+
+    const side = { left: 'left', sx: 'left', right: 'right', dx: 'right' }[marker.dataset.side?.trim().toLowerCase()];
+    this.side = side ?? (prevSide === 'left' ? 'right' : 'left');
+    el.dataset.side = this.side;
+    const scale = parseFloat(marker.dataset.scale);
+    this.scale = Number.isFinite(scale) ? Math.min(200, Math.max(25, scale)) : 100;
+    el.style.setProperty('--mani-scale', String(this.scale / 100));
+    // data-gap: px between fingertip and text (0–60). data-bleed: px the figure hangs into the margin,
+    // capped by the page bleed (85px desktop, 15px mobile) so the column never has to shrink for it.
+    const num = (v, lo, hi) => (Number.isFinite(parseFloat(v)) ? Math.min(hi, Math.max(lo, parseFloat(v))) : null);
+    this.gap = num(marker.dataset.gap, 0, 60);
+    this.bleed = num(marker.dataset.bleed, 0, Infinity);
+    if (this.gap !== null) el.style.setProperty('--finger-pad', `${this.gap}px`);
+
+    this.kind = source.matches('ul, ol') ? 'list' : 'text';
+    el.dataset.kind = this.kind;
+    const texts = this.kind === 'list'
+      ? [...source.children].map((li) => normalize(li.textContent))
+      : [normalize(source.textContent)];
+    let base = 0;
+    this.items = texts.map((text, i) => {
+      const item = { index: i, text, base };
+      base += text.length + 1;
+      return item;
+    });
+
+    // Where the marker sits, in block-wide offsets of the normalised text.
+    if (this.kind === 'list') {
+      const item = this.items[[...source.children].indexOf(marker.closest('li'))];
+      this.marked = { item: item.index, start: item.base, end: item.base + item.text.length, whole: true };
+      this.markLabel = String(item.index + 1);
+    } else {
+      const range = document.createRange();
+      range.setStart(source, 0);
+      range.setEndBefore(marker);
+      // normalize() trims, so measure the prefix with a sentinel to keep a trailing space.
+      const start = normalize(range.toString() + '\u0001').length - 1;
+      this.markLabel = normalize(marker.textContent);
+      this.marked = { item: 0, start, end: start + this.markLabel.length, whole: false };
+    }
+    this.override = null;   // set by the prototype's control bar
+
+    this.flow = Object.assign(document.createElement('div'), { className: 'flow' });
+    this.flow.setAttribute('aria-hidden', 'true');
+    source.after(this.flow);
+    this.img = Object.assign(document.createElement('img'), { className: 'manicula', alt: '', decoding: 'async' });
+    this.img.setAttribute('aria-hidden', 'true');
+    this.img.dataset.svg = `svg-${this.side}`;
+/*full*/
+    this.overlay = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    this.overlay.setAttribute('class', 'profile-overlay');
+    this.overlay.setAttribute('aria-hidden', 'true');
+    this.status = Object.assign(document.createElement('p'), { className: 'block-status', id: `${el.id}-status` });
+    this.status.setAttribute('role', 'status');
+    this.status.setAttribute('aria-live', 'polite');
+    el.append(this.img, this.overlay, this.status);
+/*/full*//*bare*/
+    el.append(this.img);
+/*/bare*/
+
+    this.spans = [];
+    this.lastWidth = -1;
+  }
+
+  /** Control bar: point at other words (text) or another entry (list, 1-based); the marked text resets. */
+  setTarget(value) {
+    const v = normalize(value ?? '');
+    this.override = v.toLocaleLowerCase('it') === this.markLabel.toLocaleLowerCase('it') ? null : v;
+  }
+
+  async loadFigure() {
+    await loadInto(this.img, svgDataUrl(this.img.dataset.svg));
+    this.profile = extractSilhouetteProfile(this.img, this.side);
+    this.tip = findFingerTipAnchor(this.profile);
+  }
+
+  prepare(font) {
+    for (const item of this.items) {
+      item.prepared = prepareWithSegments(item.text, font);
+      item.toChar = buildCursorMapper(item.prepared, item.text);
+    }
+    this.prepared = true;
+  }
+
+  /** The marked element, unless the control bar points somewhere else. */
+  resolveTarget() {
+    if (this.override === null) return this.marked;
+    if (this.kind === 'list') {
+      const item = this.items[parseInt(this.override, 10) - 1];
+      return item ? { item: item.index, start: item.base, end: item.base + item.text.length, whole: true } : null;
+    }
+    for (const item of this.items) {
+      const hit = findTarget(item.text, this.override);
+      if (hit) return { item: item.index, start: item.base + hit.start, end: item.base + hit.end, whole: false };
+    }
+    return null;
+  }
+
+  /** How far (px) the figure intrudes into the text column within [y0, y1). */
+  intrusion(y0, y1, top, g) {
+    const { rows } = this.profile;
+    const n = rows.length;
+    const r0 = Math.max(0, Math.floor((y0 - BAND_SLACK - top) / g.imgH * n));
+    const r1 = Math.min(n - 1, Math.ceil((y1 + BAND_SLACK - top) / g.imgH * n));
+    if (r1 < 0 || r0 > n - 1 || r0 > r1) return 0;
+    let ext = 0;
+    for (let r = r0; r <= r1; r++) if (rows[r] > ext) ext = rows[r];
+    if (ext === 0) return 0;
+    // Only the part that is not hanging in the outer margin (or over the block's own padding) eats into the column.
+    return Math.max(0, ext * g.imgW - g.bleed - g.edge + g.pad);
+  }
+
+  /**
+   * One full pass of variable-width line breaking with the figure at `top`.
+   * `hold` ({ at, y }) optionally keeps block offset `at` off every line above
+   * `y` by ending that line earlier (a forced break).
+   */
+  flowPass(top, g, hold = null) {
+    const lines = [];
+    let it = 0;               // current item
+    let cursor = LINE_START;  // Pretext cursor inside that item
+    let fresh = true;         // the next line opens the item (gets the list marker)
+    let y = 0;
+    for (let guard = 0; guard < 5000 && it < this.items.length; guard++) {
+      const item = this.items[it];
+      const cut = this.intrusion(y, y + g.lh, top, g);
+      const avail = g.width - cut - g.indent;
+      if (avail < MIN_LINE_WIDTH) { y += g.lh; continue; }
+      let line = layoutNextLine(item.prepared, avail, cursor);
+      if (line === null) {
+        it++;
+        cursor = LINE_START;
+        fresh = true;
+        if (it < this.items.length) y += g.gap;
+        continue;
+      }
+      if (hold && y < hold.y - 0.5) {
+        const s = item.base + item.toChar(line.start);
+        const e = item.base + item.toChar(line.end);
+        if (s < hold.at && e > hold.at) {
+          line = this.lineEndingBefore(item, hold.at - item.base, avail, cursor) ?? line;
+        } else if (s === hold.at && lines.length) {
+          // The target opens a line that is still above the fingertip: backtrack one line
+          // (possibly the last line of the previous item), end it a word earlier, and lay
+          // the following lines out again.
+          const prev = lines[lines.length - 1];
+          const owner = this.items[prev.item];
+          const localAt = prev.item === it ? hold.at - owner.base : owner.text.length + 1;
+          const wordStart = owner.text.lastIndexOf(' ', localAt - 2) + 1;
+          const shorter = wordStart > prev.start - owner.base
+            && this.lineEndingBefore(owner, wordStart, prev.avail, prev.cursor);
+          if (shorter) {
+            lines[lines.length - 1] = this.lineRecord(owner, shorter, prev.x, prev.y, prev.avail, prev.cursor, prev.first);
+            it = prev.item;
+            cursor = shorter.end;
+            fresh = false;
+            y = prev.y + g.lh;
+            continue;
+          }
+        }
+      }
+      const x = (this.side === 'left' ? cut : 0) + g.indent;
+      lines.push(this.lineRecord(item, line, x, y, avail, cursor, fresh));
+      cursor = line.end;
+      fresh = false;
+      y += g.lh;
+    }
+    return { lines, height: y };
+  }
+
+  lineRecord(item, line, x, y, avail, cursor, first) {
+    return {
+      item: item.index,
+      // Pretext's width leaves out the space hanging past the line end; drop it from the DOM too.
+      text: line.text.replace(/\s+$/, ''),
+      x,
+      y,
+      start: item.base + item.toChar(line.start),
+      end: item.base + item.toChar(line.end),
+      avail,
+      cursor,
+      first,
+    };
+  }
+
+  /** Widest line of `item` from `cursor` that ends at or before item offset `at` (binary search on maxWidth). */
+  lineEndingBefore(item, at, maxWidth, cursor) {
+    let lo = 0, hi = maxWidth, best = null;
+    for (let i = 0; i < 14; i++) {
+      const mid = (lo + hi) / 2;
+      const candidate = layoutNextLine(item.prepared, mid, cursor);
+      if (candidate && item.toChar(candidate.end) <= at) { best = candidate; lo = mid; } else hi = mid;
+    }
+    return best;
+  }
+
+  /**
+   * Convergence loop: lay out, find the target's line, move the figure so
+   * the fingertip sits on that line's centre, lay out again around the new
+   * position. Stops when the tip error is < 0.5px; on oscillation it forces
+   * a line break before the target (see below).
+   */
+  solve(g) {
+    const target = this.resolveTarget();
+    if (!target) return { ...this.flowPass(0, g), top: 0, target: null, lineIndex: -1, passes: 1, error: null };
+
+    // Line boxes start at fixed offsets (k * lh, plus the item gaps above the target),
+    // so "tip on the centre of the line at y" is a single figure position.
+    const tipPx = this.tip.y * g.imgH;
+    const topFor = (y) => y + g.lh / 2 - tipPx;
+    let passes = 0;
+    const evaluate = (top, hold) => {
+      passes++;
+      const res = this.flowPass(top, g, hold);
+      // Anchor to the line where the target starts (it may wrap onto the next one).
+      const lineIndex = res.lines.findIndex((l) => target.start >= l.start && target.start < l.end);
+      const y = lineIndex < 0 ? null : res.lines[lineIndex].y;
+      const error = y === null ? Infinity : Math.abs(topFor(y) - top);
+      return { ...res, top, target, lineIndex, y, error };
+    };
+
+    // Pass 1: where does the target land with the figure at the top?
+    // Pass 2: move the tip onto that line and re-flow around the new position.
+    let cur = evaluate(0);
+    if (cur.y === null) return { ...cur, passes, error: null };
+
+    // If the finger itself leaves less than a minimum line, no line can sit at the tip:
+    // keep the natural layout and say so instead of searching for an impossible fit.
+    const tipCut = Math.max(0, this.tip.extent * g.imgW - g.bleed - g.edge + g.pad);
+    if (g.width - g.indent - tipCut < MIN_LINE_WIDTH) {
+      return { ...evaluate(topFor(cur.y)), passes, blocked: true };
+    }
+    let best = cur;
+    const seen = new Set();
+    const landed = [cur.y];
+    while (passes < MAX_PASSES && !seen.has(Math.round(cur.y))) {
+      seen.add(Math.round(cur.y));
+      cur = evaluate(topFor(cur.y));
+      if (cur.y !== null) landed.push(cur.y);
+      if (cur.error < best.error) best = cur;
+      if (cur.error < 0.5) return { ...cur, passes };
+    }
+
+    // The iteration oscillates or wanders off: with the tip on line k the finger narrows
+    // that line and pushes the target to k+1; with the tip on k+1, line k widens and pulls
+    // it back (a tall figure can also bounce it several lines). Search the lines around
+    // where the target lands, nearest first. At each one, accept the plain layout if it
+    // happens to be a fixed point, otherwise force a break just before the target, the
+    // way a compositor would (flowPass backtracks when the target already opens a line).
+    const lo = Math.min(...landed) - 3 * g.lh;
+    const hi = Math.max(...landed) + 3 * g.lh;
+    const candidates = [];
+    for (let k = Math.ceil((lo - landed[0]) / g.lh); landed[0] + k * g.lh <= hi + 0.5; k++) {
+      if (landed[0] + k * g.lh >= 0) candidates.push(k);
+    }
+    candidates.sort((a, b) => Math.abs(a) - Math.abs(b) || b - a);   // nearest first, later wins ties
+    for (const k of candidates) {
+      const y = landed[0] + k * g.lh;
+      const plain = evaluate(topFor(y));
+      if (plain.error < best.error) best = plain;
+      if (plain.error < 0.5) break;
+      const held = evaluate(topFor(y), { at: target.start, y });
+      if (held.error < best.error) best = { ...held, forcedBreak: true };
+      if (held.error < 0.5) break;
+    }
+    return { ...best, passes };
+  }
+
+  readGeometry() {
+    if (this.bleed !== null) {
+      const pageBleed = parseFloat(getComputedStyle(root).getPropertyValue('--bleed')) || 0;
+      this.el.style.setProperty('--bleed', `${Math.min(this.bleed, pageBleed)}px`);
+    }
+    const cs = getComputedStyle(this.el);
+    const px = (name) => parseFloat(cs.getPropertyValue(name)) || 0;
+    const blockBox = this.el.getBoundingClientRect();
+    const flowBox = this.flow.getBoundingClientRect();
+    const imgW = this.img.getBoundingClientRect().width;   // CSS width (transforms only translate)
+    return {
+      width: this.flow.clientWidth,
+      lh: parseFloat(getComputedStyle(this.flow).lineHeight),
+      imgW,
+      imgH: imgW * this.img.naturalHeight / this.img.naturalWidth,
+      bleed: px('--bleed'),
+      pad: px('--finger-pad'),
+      indent: px('--item-indent'),
+      gap: px('--item-gap'),
+      // Distance between the block edge (where the figure is anchored) and the text column.
+      edge: this.side === 'left' ? flowBox.left - blockBox.left : blockBox.right - flowBox.right,
+    };
+  }
+
+  render() {
+    if (!this.prepared || !this.profile) return;
+    const g = this.readGeometry();
+    this.lastWidth = g.width;
+    const res = this.solve(g);
+
+    // A target in the first lines would push the figure above the block: shift everything down instead.
+    const inset = Math.max(0, -res.top);
+    const figTop = res.top + inset;
+    const height = Math.max(res.height + inset, figTop + g.imgH);
+
+    this.paintLines(res.lines, inset, res.target);
+    this.flow.style.height = `${Math.ceil(height)}px`;
+    const figOffsetY = this.flow.offsetTop;   // flow sits below the heading (and inside the blockquote)
+    const t = `translate3d(0, ${(figOffsetY + figTop).toFixed(2)}px, 0)`;
+    this.img.style.transform = t;
+/*full*/
+    this.overlay.style.transform = t;
+    this.paintOverlay(g);
+/*/full*/
+    this.result = { ...res, inset, figTop, tipY: figTop + this.tip.y * g.imgH, lineHeight: g.lh };
+/*full*/
+    this.reportStatus(res);
+/*/full*/
+  }
+
+  paintLines(lines, inset, target) {
+    while (this.spans.length < lines.length) {
+      const span = document.createElement('span');
+      span.className = 'line';
+      this.flow.appendChild(span);
+      this.spans.push(span);
+    }
+    while (this.spans.length > lines.length) this.spans.pop().remove();
+
+    lines.forEach((line, i) => {
+      const span = this.spans[i];
+      span.style.transform = `translate3d(${line.x.toFixed(2)}px, ${(line.y + inset).toFixed(2)}px, 0)`;
+      span.classList.toggle('is-pointed', Boolean(target?.whole) && line.item === target.item);
+      span.classList.toggle('has-marker', this.kind === 'list' && line.first);
+      const a = target && !target.whole ? Math.max(target.start, line.start) - line.start : -1;
+      const b = target && !target.whole ? Math.min(target.end, line.end) - line.start : -1;
+      if (a >= 0 && b > a) {
+        const mark = document.createElement('mark');
+        mark.textContent = line.text.slice(a, b);
+        span.replaceChildren(line.text.slice(0, a), mark, line.text.slice(b));
+      } else if (span.textContent !== line.text || span.firstElementChild) {
+        span.textContent = line.text;
+      }
+    });
+  }
+
+/*full*/
+  paintOverlay(g) {
+    if (!document.documentElement.classList.contains('show-profile')) return;
+    const { rows } = this.profile;
+    const n = rows.length;
+    const pts = [];
+    const edgeX = this.side === 'left' ? 0 : g.imgW;
+    pts.push(`${edgeX},0`);
+    for (let r = 0; r < n; r += 2) {
+      const reach = rows[r] * g.imgW;
+      const x = this.side === 'left' ? reach : g.imgW - reach;
+      pts.push(`${x.toFixed(1)},${((r + 0.5) / n * g.imgH).toFixed(1)}`);
+    }
+    pts.push(`${edgeX},${g.imgH.toFixed(1)}`);
+    const tipY = this.tip.y * g.imgH;
+    const tipX = this.side === 'left' ? this.tip.extent * g.imgW : g.imgW - this.tip.extent * g.imgW;
+    const colX = this.side === 'left' ? g.bleed + g.edge : g.imgW - g.bleed - g.edge;
+    this.overlay.setAttribute('viewBox', `0 0 ${g.imgW} ${g.imgH}`);
+    this.overlay.setAttribute('height', g.imgH);
+    this.overlay.innerHTML = `
+      <polygon points="${pts.join(' ')}" fill="rgba(138,75,31,.12)" stroke="#8a4b1f" stroke-width="1"/>
+      <line x1="${colX}" y1="0" x2="${colX}" y2="${g.imgH}" stroke="#8a4b1f" stroke-dasharray="3 4" stroke-width="1"/>
+      <line x1="0" y1="${tipY}" x2="${g.imgW}" y2="${tipY}" stroke="#c0392b" stroke-width="1"/>
+      <circle cx="${tipX}" cy="${tipY}" r="4" fill="#c0392b"/>`;
+  }
+
+  reportStatus(res) {
+    const label = this.override ?? this.markLabel;
+    if (!label) { this.status.textContent = T.noTarget; return; }
+    const term = fmt(this.kind === 'list' ? T.termItem : T.termText, { label });
+    if (!res.target) { this.status.textContent = fmt(T.notFound, { term }); return; }
+    if (res.lineIndex < 0) { this.status.textContent = fmt(T.lineUnknown, { term }); return; }
+    if (res.blocked) { this.status.textContent = fmt(T.blocked, { term }); return; }
+    const err = res.error < 0.05 ? '0' : res.error.toFixed(1);
+    this.status.textContent = fmt(T.ok, { term, line: res.lineIndex + 1, err, passes: fmt(res.passes === 1 ? T.passOne : T.passMany, { n: res.passes }) })
+      + (res.forcedBreak ? T.forcedBreak : '');
+  }
+/*/full*/
+}
+
+/* ---------------------------------------------------------------- */
+/* Boot                                                             */
+/* ---------------------------------------------------------------- */
+
+const root = document.documentElement;
+const blocks = [];
+for (const el of document.querySelectorAll('.manicula-block')) {
+  try {
+    blocks.push(new ManiculaBlock(el, blocks.length, blocks.at(-1)?.side));
+  } catch (err) {
+    console.warn('[manicula]', err.message);   // the block stays plain text
+  }
+}
+
+function fontOf(el) {
+  const cs = getComputedStyle(el);
+  return `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+}
+
+function prepareAll() {
+  clearCache();
+  for (const b of blocks) b.prepare(fontOf(b.flow));
+}
+
+function renderAll() { for (const b of blocks) b.render(); }
+
+let frame = 0;
+let resizeTimer = 0;
+const dirty = new Set();
+function schedule(block) {
+  if (block) dirty.add(block); else blocks.forEach((b) => dirty.add(b));
+  if (frame) return;
+  frame = requestAnimationFrame(() => {
+    frame = 0;
+    for (const b of dirty) b.render();
+    dirty.clear();
+  });
+}
+
+async function boot() {
+  // Each block can use its own type size (the quotation is set larger): load every face in use.
+  const fonts = new Set(blocks.map((b) => fontOf(b.flow)));
+  await Promise.all([...[...fonts].map((f) => document.fonts.load(f)), ...blocks.map((b) => b.loadFigure())]);
+  prepareAll();
+  root.classList.add('is-hydrated');
+  renderAll();
+
+  // Fonts may finish (or swap) later: measurements are cached per font, so re-prepare.
+  document.fonts.ready.then(() => { prepareAll(); schedule(); });
+  document.fonts.addEventListener('loadingdone', () => { prepareAll(); schedule(); });
+
+  // Re-flow whenever a column changes width (window resize, slider, media query).
+  const ro = new ResizeObserver((entries) => {
+    root.classList.add('is-resizing');
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => root.classList.remove('is-resizing'), 150);
+    for (const entry of entries) {
+      const block = blocks.find((b) => b.flow === entry.target);
+      if (block && Math.abs(entry.contentRect.width - block.lastWidth) > 0.5) schedule(block);
+    }
+  });
+  blocks.forEach((b) => ro.observe(b.flow));
+  // Breakpoint changes alter --mani-w / --bleed without necessarily changing the column width.
+  matchMedia('(max-width: 820px)').addEventListener('change', () => schedule());
+
+  window.maniculae = blocks; // handy for inspection in devtools
+  root.dataset.ready = 'true';
+}
+
+/*full*/
+/* ---------------------------------------------------------------- */
+/* Controls                                                         */
+/* ---------------------------------------------------------------- */
+
+function bindControls() {
+  // Each target control names its block (data-block); it starts on the marked text or entry.
+  for (const input of document.querySelectorAll('[data-block]')) {
+    const b = blocks.find((block) => block.el.id === input.dataset.block);
+    if (!b) { input.disabled = true; continue; }
+    if (input.tagName === 'SELECT') {
+      b.items.forEach((item, i) => {
+        const words = item.text.split(' ');
+        input.add(new Option(`${i + 1}. ${words.slice(0, 4).join(' ')}${words.length > 4 ? '…' : ''}`, String(i + 1)));
+      });
+    }
+    input.value = b.markLabel;
+    input.setAttribute('aria-describedby', b.status.id);
+    input.addEventListener('input', () => { b.setTarget(input.value); schedule(b); });
+  }
+
+  const col = document.getElementById('col-w');
+  const colOut = document.getElementById('col-out');
+  const syncCol = () => { root.style.setProperty('--col-w', `${col.value}px`); colOut.value = `${col.value}px`; };
+  col.addEventListener('input', syncCol);
+  syncCol();
+
+  const pad = document.getElementById('finger-pad');
+  const padOut = document.getElementById('pad-out');
+  const syncPad = (rerender) => {
+    root.style.setProperty('--finger-pad', `${pad.value}px`);
+    padOut.value = `${pad.value}px`;
+    if (rerender) schedule();
+  };
+  pad.addEventListener('input', () => syncPad(true));
+  // Keep the CSS default for the breakpoint until the user touches the slider.
+  padOut.value = `${parseFloat(getComputedStyle(root).getPropertyValue('--finger-pad'))}px`;
+  pad.value = parseFloat(getComputedStyle(root).getPropertyValue('--finger-pad'));
+
+  // Scales every figure (on top of its own size class); the column width does not change,
+  // so the ResizeObserver stays quiet and the blocks are re-flowed explicitly.
+  const zoom = document.getElementById('mani-zoom');
+  const zoomOut = document.getElementById('zoom-out');
+  const syncZoom = (rerender) => {
+    root.style.setProperty('--mani-zoom', String(zoom.value / 100));
+    zoomOut.value = `${zoom.value}%`;
+    if (rerender) schedule();
+  };
+  zoom.addEventListener('input', () => syncZoom(true));
+  syncZoom(false);
+
+  const show = document.getElementById('show-profile');
+  show.addEventListener('change', () => {
+    root.classList.toggle('show-profile', show.checked);
+    schedule();
+  });
+}
+
+bindControls();
+/*/full*/
+boot().catch((err) => {
+  console.error('[manicula] layout engine failed, falling back to plain text', err);
+  root.classList.remove('is-hydrated');
+});
+</script>
+</body>
+</html>
