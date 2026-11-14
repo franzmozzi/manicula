@@ -305,6 +305,10 @@
     font-weight: 600;
   }
   .guide p, .guide ul { margin: 0 0 12px; }
+  /* Progressive enhancement: balanced headings, no orphans in the guide.
+     Only DOM-wrapped text; the flowed blocks are broken by Pretext. */
+  h1, h2, h3, .dek { text-wrap: balance; }
+  .guide p, .guide li, .guide dd, .quote footer { text-wrap: pretty; }
   .guide ul { padding-left: 22px; }
   .guide li + li { margin-top: 6px; }
   .guide code {
